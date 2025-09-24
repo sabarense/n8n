@@ -48,6 +48,10 @@ export class Random implements INodeType {
 				
 				const min = this.getNodeParameter('min', i) as number;
 				const max = this.getNodeParameter('max', i) as number;
+
+				if (isNaN(min) || isNaN(max)) {
+					throw new NodeOperationError(this.getNode(), 'Os parâmetros "Min" e "Max" devem ser números válidos.', { itemIndex: i });
+				}
                 
                 if (min === undefined || max === undefined || min === null || max === null) {
                     throw new NodeOperationError(this.getNode(), 'Os parâmetros "Min" e "Max" são obrigatórios.', { itemIndex: i });
