@@ -59,8 +59,6 @@ POSTGRES_DB=n8n
 POSTGRES_NON_ROOT_USER=n8n_user
 POSTGRES_NON_ROOT_PASSWORD=outra_senha_forte_aqui
 
-# As variáveis abaixo são usadas pelo n8n, mas já são lidas
-# do docker-compose.yml, então não precisam ser repetidas aqui.
 ```
 
 ---
