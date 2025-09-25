@@ -133,7 +133,6 @@ docker compose up -d
 │   ├── Random.node.json      # Configurações do node
 │   └── icon.node.svg         # Ícone do node (corrigido)
 ├── init-data.sh              # Script de inicialização
-├── .env                      # Variáveis de ambiente (criar manualmente)
 ├── docker-compose.yaml       # Orquestração dos serviços
 ├── Dockerfile                # Imagem customizada do n8n
 ├── package.json              # Dependências e scripts
