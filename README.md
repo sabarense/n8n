@@ -129,9 +129,9 @@ docker compose up -d
 ```
 .
 ├── nodes/Random/
-│   ├── Random.node.ts        # Código-fonte do node customizado
-│   ├── Random.node.json      # Configurações do node
-│   └── icon.node.svg         # Ícone do node (corrigido)
+│   ├── Random.node.ts       # Código-fonte do node customizado
+│   ├── Random.node.json     # Configurações do node
+│   └── icon.node.svg        # Ícone do node
 ├── init-data.sh              # Script de inicialização
 ├── docker-compose.yaml       # Orquestração dos serviços
 ├── Dockerfile                # Imagem customizada do n8n
