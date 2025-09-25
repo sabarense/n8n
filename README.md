@@ -25,7 +25,6 @@ O ambiente de desenvolvimento e execução é totalmente gerenciado com **Docker
 
 Antes de começar, garanta que você tenha as seguintes ferramentas instaladas:
 
-- [Node.js](https://nodejs.org/en/) (v16 ou superior) e npm
 - [Docker](https://www.docker.com/get-started)
 - [Docker Compose](https://docs.docker.com/compose/install/)
 
@@ -33,7 +32,7 @@ Antes de começar, garanta que você tenha as seguintes ferramentas instaladas:
 
 ## 🚀 Guia de Instalação
 
-Siga os passos abaixo para configurar o ambiente localmente.
+Como todo o ambiente é containerizado, a instalação é rápida e simples. Siga os passos abaixo:
 
 ### 1️⃣ Clonar o Repositório
 
@@ -45,64 +44,30 @@ cd n8n
 ```
 ---
 
-### 2️⃣ Configurar o Ambiente
-
-As configurações do banco de dados e do n8n são gerenciadas por variáveis de ambiente.
-
-Crie um arquivo chamado `.env` na raiz do projeto com o seguinte conteúdo (substitua os valores de exemplo por senhas seguras):
-
-```env
-# Variáveis para o Banco de Dados PostgreSQL
-POSTGRES_USER=admin
-POSTGRES_PASSWORD=sua_senha_forte_aqui
-POSTGRES_DB=n8n
-POSTGRES_NON_ROOT_USER=n8n_user
-POSTGRES_NON_ROOT_PASSWORD=outra_senha_forte_aqui
-
-```
-
 ---
 
-### 3️⃣ Instalar as Dependências
+### 2️⃣ Construa a Imagem Customizada
 
-Instale as dependências necessárias para o desenvolvimento do node:
-
+Este comando irá construir a imagem Docker do n8n, incluindo quaisquer nodes customizados que você tenha adicionado ao projeto.
 ```bash
-npm install
+docker compose build
 ```
 
 ---
 
-### 4️⃣ Compilar o Node Customizado
+### 3️⃣ Inicie os Serviços
 
-Compile o código TypeScript para JavaScript:
-
-```bash
-npm run build
-```
-
-Os arquivos compilados serão gerados no diretório `dist/`.
-
----
-
-### 5️⃣ Executar o Serviço com Docker
-
-Inicie o n8n e o banco de dados com:
+Agora, suba os contêineres do n8n e do Postgres em modo "detached" (em segundo plano).
 
 ```bash
 docker compose up -d
 ```
-
-Para acompanhar os logs:
-
-```bash
-docker compose logs -f
-```
+---
 
 Após a inicialização, a interface do n8n estará disponível em:  
 **[http://localhost:5678](http://localhost:5678)**
 
-Para verificar se o node foi carregado corretamente, crie um novo workflow e procure por **"Random"** na lista de nodes.
+Na primeira vez que acessar, você precisará configurar uma conta de administrador (owner) para o n8n.
 
 ---
 
@@ -110,15 +75,22 @@ Para verificar se o node foi carregado corretamente, crie um novo workflow e pro
 
 O método recomendado para testar o node é a **validação manual** diretamente na interface do n8n, que permite verificar tanto os casos de sucesso quanto as falhas controladas.
 
+### Teste de Funcionalidade Principal (Números Válidos)
 
 Este teste valida a funcionalidade principal do node.
 
-1.  Acesse sua instância local do n8n.
-2.  Crie um novo workflow.
-3.  Adicione o node **"Random"**.
-4.  Configure os parâmetros `Min` e `Max` com um intervalo válido (ex: `Min: 1`, `Max: 100`).
-5.  Clique em **"Execute Node"**.
-6.  Verifique se o resultado no painel **Output** contém a chave `randomNumber` com um número inteiro dentro do intervalo esperado.
+1.  Acesse sua instância local do n8n em [http://localhost:5678](http://localhost:5678)
+2.  Crie um novo workflow
+3.  Adicione o node **"Random"**
+4.  Configure os parâmetros `Min` e `Max` com um intervalo válido (ex: `Min: 1`, `Max: 100`)
+5.  Clique em **"Execute Node"**
+6.  **Resultado esperado:** O painel **Output** deve conter:
+   ```json
+   {
+     "randomNumber": 42
+   }
+   ```
+   Onde `42` é um número inteiro dentro do intervalo 1-100.
 
 ### Testes de Validação e Erros
 
@@ -141,16 +113,16 @@ O node possui uma camada tripla de validação para garantir a integridade dos d
 Quando fizer alterações no código-fonte (`Random.node.ts`), siga estes passos:
 
 1. Modifique o código conforme necessário  
-2. Recompile o node:
+2. Reconstrua a imagem:
 
 ```bash
-npm run build
+docker compose build
 ```
 
-3. Reinicie o container do n8n para recarregar os nodes customizados:
+3. Reinicie os serviços, se necessário:
 
 ```bash
-docker compose restart n8n
+docker compose up -d
 ```
 
 (O banco de dados não será afetado.)
@@ -161,14 +133,20 @@ docker compose restart n8n
 
 ```
 .
-├── nodes/Random
-│   ├── Random.node.ts    # Código-fonte do node
-│   └── Random.svg        # Ícone do node
-├── dist/                 # Código compilado (gerado pelo `npm run build`)
-├── .env                  # Variáveis de ambiente 
-├── docker-compose.yml    # Define os serviços do n8n e postgres
-├── package.json          # Dependências e scripts do projeto
-└── README.md            
+├── nodes/Random/
+│   ├── Random.node.ts        # Código-fonte do node customizado
+│   ├── Random.node.json      # Configurações do node
+│   └── icon.node.svg         # Ícone do node (corrigido)
+├── init-data.sh              # Script de inicialização
+├── .env                      # Variáveis de ambiente (criar manualmente)
+├── docker-compose.yaml       # Orquestração dos serviços
+├── Dockerfile                # Imagem customizada do n8n
+├── package.json              # Dependências e scripts
+├── tsconfig.json             # Configuração TypeScript
+├── gulpfile.js               # Tasks de build
+├── index.js                  # Ponto de entrada
+├── LICENSE.md                # Licença do projeto
+└── README.md                 # Documentação
 ```
 
 ---
