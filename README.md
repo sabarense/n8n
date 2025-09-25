@@ -44,8 +44,6 @@ cd n8n
 ```
 ---
 
----
-
 ### 2️⃣ Construa a Imagem Customizada
 
 Este comando irá construir a imagem Docker do n8n, incluindo quaisquer nodes customizados que você tenha adicionado ao projeto.
@@ -124,9 +122,6 @@ docker compose build
 ```bash
 docker compose up -d
 ```
-
-(O banco de dados não será afetado.)
-
 ---
 
 ## 📂 Estrutura do Projeto
